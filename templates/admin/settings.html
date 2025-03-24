@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Settings - Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="admin-container">
+    <!-- Navigation -->
+    <nav class="admin-nav">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="admin-logo">
+        <h2>Admin Dashboard</h2>
+        <div class="nav-links">
+            <a href="{{ url_for('admin_dashboard') }}" class="view-site">Dashboard</a>
+            <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="admin-content">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="add-product-section">
+            <h3>Website Settings</h3>
+            <form method="POST" action="{{ url_for('admin_settings') }}">
+                <div class="form-group">
+                    <label for="site_name">Site Name</label>
+                    <input type="text" id="site_name" name="site_name" value="{{ settings.get('site_name', '') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="site_description">Site Description</label>
+                    <textarea id="site_description" name="site_description" required>{{ settings.get('site_description', '') }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact_email">Contact Email</label>
+                    <input type="email" id="contact_email" name="contact_email" value="{{ settings.get('contact_email', '') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact_phone">Contact Phone</label>
+                    <input type="tel" id="contact_phone" name="contact_phone" value="{{ settings.get('contact_phone', '') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" required>{{ settings.get('address', '') }}</textarea>
+                </div>
+
+                <h4>Social Media Links</h4>
+                <div class="form-group">
+                    <label for="facebook">Facebook URL</label>
+                    <input type="url" id="facebook" name="facebook" value="{{ settings.get('social_media', {}).get('facebook', '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="twitter">Twitter URL</label>
+                    <input type="url" id="twitter" name="twitter" value="{{ settings.get('social_media', {}).get('twitter', '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="instagram">Instagram URL</label>
+                    <input type="url" id="instagram" name="instagram" value="{{ settings.get('social_media', {}).get('instagram', '') }}">
+                </div>
+
+                <button type="submit" class="admin-btn">Save Settings</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Auto-hide flash messages after 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const flashMessages = document.querySelectorAll('.flash-message');
+                flashMessages.forEach(function(message) {
+                    message.style.display = 'none';
+                });
+            }, 3000);
+        });
+    </script>
+</body>
+</html> 

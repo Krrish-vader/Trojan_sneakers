@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Trojan</title>
+    <link rel="stylesheet" href="/static/css/styles5.css">
+    <link rel="stylesheet" href="/static/css/checkout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+    <div id="loader">
+        <img src="/static/images/nike_load.gif" alt="Loading...">
+    </div>
+    
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <a href="{{ url_for('home') }}"><img src="/static/Images/Trojan.jpg" width="220px"> </a>
+            </div>
+            <nav>
+                <ul id="MenuItems">
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('products') }}">Products</a></li>
+                    <li><a href="{{ url_for('account') }}">Account</a></li>
+                </ul>
+            </nav>
+            <a href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.png') }}" width="30px" height="30px"></a>
+            <img src="{{ url_for('static', filename='images/menu.png') }}" class="menu-icon" onclick="menutoggle()">
+        </div>
+    </div>
+
+    <div class="checkout-container">
+        <div class="checkout-header">
+            <h1>Checkout</h1>
+            <div class="order-summary">
+                <h2>Order Summary</h2>
+                <div id="checkout-items">
+                    <!-- Items will be dynamically added here -->
+                </div>
+                <div class="total-amount">
+                    <span>Total Amount:</span>
+                    <span id="checkout-total">₹0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <form id="checkout-form" class="checkout-form">
+            <div class="form-section">
+                <h2>Shipping Information</h2>
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" name="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" name="pincode" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Payment Information</h2>
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <input type="radio" id="upi" name="payment" value="upi" checked>
+                        <label for="upi">UPI</label>
+                    </div>
+                    <div class="payment-method">
+                        <input type="radio" id="card" name="payment" value="card">
+                        <label for="card">Credit/Debit Card</label>
+                    </div>
+                    <div class="payment-method">
+                        <input type="radio" id="cod" name="payment" value="cod">
+                        <label for="cod">Cash on Delivery</label>
+                    </div>
+                </div>
+
+                <div id="upi-details" class="payment-details">
+                    <div class="form-group">
+                        <label for="upi-id">UPI ID</label>
+                        <input type="text" id="upi-id" name="upi-id" placeholder="example@upi">
+                    </div>
+                </div>
+
+                <div id="card-details" class="payment-details" style="display: none;">
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="text" id="expiry" name="expiry" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="password" id="cvv" name="cvv" placeholder="123">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="checkout-button">Place Order</button>
+        </form>
+    </div>
+
+    <!--------------footer-->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col-1">
+                    <h3>Download our App</h3>
+                    <p>Download our app for Android and iOS mobile phones</p>
+                    <div class="applogo">
+                        <img src="/static/images/Playstore.png">
+                        <img src="/static/images/apple.png">
+                    </div>
+                </div>
+                <div class="footer-col-2">
+                    <img src="/static/images/Trojan111.jpg" alt="Logo">
+                    <p>Trojan offers the most exclusive sneakers Available on the market.</p>
+                </div>
+                <div class="footer-col-3">
+                    <div class="useful-links">
+                        <h3>Useful Links</h3>
+                        <ul>
+                            <li>Coupons</li>
+                            <li>Blog Post</li>
+                            <li>Return Policy</li>
+                            <li>Join Affiliate</li>
+                        </ul>
+                    </div>
+                    <div class="social-links">
+                        <h3>Social Media</h3>
+                        <ul>
+                            <li>Github</li>
+                            <li>X</li>
+                            <li>LinkedIn</li>
+                            <li>Instagram</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <p class="Copyright">Copyright 2025 - Trojan(SneakerHead)</p>
+        </div>
+    </div>
+
+    <script>
+        // Menu toggle functionality
+        var MenuItems = document.getElementById("MenuItems");
+        MenuItems.style.maxHeight = "0px";
+
+        function menutoggle() {
+            if (MenuItems.style.maxHeight == "0px") {
+                MenuItems.style.maxHeight = "200px";
+            } else {
+                MenuItems.style.maxHeight = "0px";
+            }
+        }
+
+        // Payment method toggle
+        const paymentMethods = document.querySelectorAll('input[name="payment"]');
+        const upiDetails = document.getElementById('upi-details');
+        const cardDetails = document.getElementById('card-details');
+
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', (e) => {
+                if (e.target.value === 'upi') {
+                    upiDetails.style.display = 'block';
+                    cardDetails.style.display = 'none';
+                } else if (e.target.value === 'card') {
+                    upiDetails.style.display = 'none';
+                    cardDetails.style.display = 'block';
+                } else {
+                    upiDetails.style.display = 'none';
+                    cardDetails.style.display = 'none';
+                }
+            });
+        });
+
+        // Load cart items
+        function loadCheckoutItems() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const checkoutItems = document.getElementById('checkout-items');
+            const checkoutTotal = document.getElementById('checkout-total');
+            let total = 0;
+
+            checkoutItems.innerHTML = '';
+            
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+
+                const itemElement = document.createElement('div');
+                itemElement.className = 'checkout-item';
+                itemElement.innerHTML = `
+                    <div class="item-details">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-quantity">x${item.quantity}</span>
+                    </div>
+                    <span class="item-price">₹${subtotal.toFixed(2)}</span>
+                `;
+                checkoutItems.appendChild(itemElement);
+            });
+
+            checkoutTotal.textContent = `₹${total.toFixed(2)}`;
+            return { items: cart, total: total };
+        }
+
+        // Handle form submission
+        document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const cartData = loadCheckoutItems();
+            const form = e.target;
+            const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
+            
+            // Gather payment details
+            let paymentId = '';
+            if (selectedPayment === 'upi') {
+                paymentId = document.getElementById('upi-id').value;
+            } else if (selectedPayment === 'card') {
+                paymentId = document.getElementById('card-number').value;
+            }
+
+            // Create order data
+            const orderData = {
+                name: form.fullname.value,
+                email: form.email.value,
+                phone: form.phone.value,
+                address: form.address.value,
+                city: form.city.value,
+                state: form.state.value,
+                pincode: form.pincode.value,
+                payment_method: selectedPayment,
+                payment_id: paymentId,
+                items: cartData.items,
+                total_amount: cartData.total
+            };
+
+            try {
+                const response = await fetch('/place_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Order placed successfully! Thank you for shopping with us.');
+                    localStorage.removeItem('cart');
+                    window.location.href = '/';
+                } else {
+                    alert(result.message || 'Failed to place order. Please try again.');
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+                console.error('Error:', error);
+            }
+        });
+
+        // Initialize checkout page
+        document.addEventListener('DOMContentLoaded', loadCheckoutItems);
+    </script>
+</body>
+</html> 

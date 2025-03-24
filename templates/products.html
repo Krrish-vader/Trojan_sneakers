@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products - Trojan</title>
+    <link rel="stylesheet" href="/static/css/styles1.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+    <div id="loader">
+        <img src="/static/images/nike_load.gif" alt="Loading...">
+    </div>
+    
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <a href="{{ url_for('home') }}"><img src="/static/Images/Trojan.jpg" width="220px"> </a>
+            </div>
+            <nav>
+                <ul id="MenuItems">
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('products') }}" class="active">Products</a></li>
+                    {% if session.get('user_id') %}
+                        <li><a href="{{ url_for('account') }}">Account</a></li>
+                        <li><a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('account') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <a href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.png') }}" width="30px" height="30px"></a>
+            <img src="{{ url_for('static', filename='images/menu.png') }}" class="menu-icon" onclick="menutoggle()">
+        </div>
+    </div>
+
+    <div class="small-container">
+        <div class="row row-2">
+            <h2>All Products</h2>
+        </div>
+
+        <div class="row">
+            {% for product in products %}
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='uploads/' + product.image) }}" alt="{{ product.name }}" onerror="this.src='/static/images/no-image.jpg'">
+                <h4>{{ product.name }}</h4>
+                <div class="rating">
+                    <i class="fa fa-star" style="color: #ff523b;"></i>
+                    <i class="fa fa-star" style="color: #ff523b;"></i>
+                    <i class="fa fa-star" style="color: #ff523b;"></i>
+                    <i class="fa fa-star" style="color: #ff523b;"></i>
+                    <i class="fa-regular fa-star"></i>
+                </div>
+                <p>₹{{ "%.2f"|format(product.price) }}</p>
+                <button onclick='addToCart({"id": "{{ product._id }}", "name": "{{ product.name|replace('"', '\\"') }}", "price": {{ product.price }}, "image": "{{ url_for('static', filename='uploads/' + product.image)|replace('"', '\\"') }}"})' {% if product.stock <= 0 %}disabled{% endif %}>
+                    {% if product.stock > 0 %}Add to Cart{% else %}Out of Stock{% endif %}
+                </button>
+            </div>
+            {% if loop.index % 4 == 0 and not loop.last %}
+        </div>
+        <div class="row">
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!--------------footer-->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col-1">
+                    <h3>Download Our App</h3>
+                    <p>Download App for Android and ios mobile phone.</p>
+                    <div class="app-logo">
+                        <img src="{{ url_for('static', filename='images/Playstore.png') }}" alt="Play Store">
+                        <img src="{{ url_for('static', filename='images/apple.png') }}" alt="App Store">
+                    </div>
+                </div>
+                <div class="footer-col-2">
+                    <img src="{{ url_for('static', filename='images/Trojan.jpg') }}" width="125px">
+                    <p>Our Purpose Is To Sustainably Make the Pleasure and Benefits of Sports Accessible to the Many.</p>
+                </div>
+                <div class="footer-col-3">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li>Coupons</li>
+                        <li>Blog Post</li>
+                        <li>Return Policy</li>
+                        <li>Join Affiliate</li>
+                    </ul>
+                </div>
+                <div class="footer-col-4">
+                    <h3>Follow us</h3>
+                    <ul>
+                        <li>Facebook</li>
+                        <li>Twitter</li>
+                        <li>Instagram</li>
+                        <li>Youtube</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="copyright">Copyright 2025 - Trojan</p>
+        </div>
+    </div>
+
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+        MenuItems.style.maxHeight = "0px";
+
+        function menutoggle() {
+            if (MenuItems.style.maxHeight == "0px") {
+                MenuItems.style.maxHeight = "200px";
+            } else {
+                MenuItems.style.maxHeight = "0px";
+            }
+        }
+
+        // Create toast element
+        const toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-notification';
+        toastContainer.innerHTML = '<i class="fas fa-check-circle"></i><span id="toastMessage"></span>';
+        document.body.appendChild(toastContainer);
+
+        // Function to show toast notification
+        function showToast(message) {
+            const toast = toastContainer;
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to add item to cart
+        function addToCart(product) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingProductIndex = cart.findIndex(item => item.id === product.id);
+
+            if (existingProductIndex !== -1) {
+                cart[existingProductIndex].quantity += 1;
+            } else {
+                product.quantity = 1;
+                cart.push(product);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            showToast(product.name + " has been added to cart!");
+        }
+    </script>
+</body>
+</html>

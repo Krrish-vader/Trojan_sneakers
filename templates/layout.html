@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_settings.get('site_name', 'Trojan') }}</title>
+    <meta name="description" content="{{ site_settings.get('site_description', '') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{{ url_for('home') }}">{{ site_settings.get('site_name', 'Trojan') }}</a>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('cart') }}">Cart</a>
+                <a href="{{ url_for('account') }}">Account</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: {{ site_settings.get('contact_email', '') }}</p>
+                <p>Phone: {{ site_settings.get('contact_phone', '') }}</p>
+                <p>Address: {{ site_settings.get('address', '') }}</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    {% if site_settings.get('social_media', {}).get('facebook') %}
+                    <a href="{{ site_settings.get('social_media', {}).get('facebook') }}" target="_blank">Facebook</a>
+                    {% endif %}
+                    {% if site_settings.get('social_media', {}).get('twitter') %}
+                    <a href="{{ site_settings.get('social_media', {}).get('twitter') }}" target="_blank">Twitter</a>
+                    {% endif %}
+                    {% if site_settings.get('social_media', {}).get('instagram') %}
+                    <a href="{{ site_settings.get('social_media', {}).get('instagram') }}" target="_blank">Instagram</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ site_settings.get('site_name', 'Trojan') }} {{ now.year }}. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

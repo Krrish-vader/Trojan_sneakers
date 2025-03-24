@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trojan | Ecommerce Website Design</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="loader">
+        <img src="/static/images/nike_load.gif" alt="Loading...">
+    </div>
+
+    <div class="header">
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <div class="nav-right"></div>
+                    <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/Trojan.jpg') }}" width="220px"> </a>
+                </div>
+                <nav>
+                    <ul id="MenuItems">
+                        <li><a href="{{ url_for('home') }}" class="active">Home</a></li>
+                        <li><a href="{{ url_for('products') }}">Products</a></li>
+                        {% if session.get('user_id') %}
+                            <li><a href="{{ url_for('account') }}">Account</a></li>
+                            <li><a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('account') }}">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                <a href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.png') }}" width="30px" height="30px"></a>
+                <img src="{{ url_for('static', filename='images/menu.png') }}" class="menu-icon" onclick="menutoggle()">
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <h1 class="sneaker-title">SneakerHead</h1>
+                    <h2>Home of Sneaker Culture</h2>
+                    <a href="" class="btn">Explore Now &#8594;</a>
+                </div>
+                <div class="col-2">
+                    <img src="{{ url_for('static', filename='images/background.jpg') }}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <!--------featured products------------->
+ <div class="small-container">
+        <h2 class="title">Featured Products</h2>
+        <div class="row">
+            <div class="col-4">
+                <a href="{{ url_for('productdetails', product_id='dior_id') }}"><img src="{{ url_for('static', filename='images/dior.jpg') }}"></a>
+                <a href="{{ url_for('productdetails', product_id='dior_id') }}"><h4>Dior's</h4></a>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                </div>
+                <p>₹4000.00</p>
+            </div>
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='images/yezzy1.jpg') }}">
+                <h4>Yezzys</h4>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                    </div>
+                </div>
+                <p>₹350.00</p>
+            </div>
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='images/LV(blue).jpg') }}">
+                <h4>LV Forces</h4>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                </div>
+                <p>₹2000.00</p>
+            </div>
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='images/offwhitered.jpg') }}">
+                <h4>Jordan off white</h4>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa-regular fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                </div>
+                <p>₹1550.00</p>
+            </div>
+        </div>
+        <h2 class="title">Latest Product</h2>
+        <div class="row">
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='images/travisreversemocha.jpg') }}">
+                <h4>Jordan reverse mocha</h4>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa-regular fa-star"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                </div>
+                <p>₹650.00</p>
+            </div>
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='images/newbalanceshoe.jpg') }}">
+                <h4>New Balance</h4>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                </div>
+                <p>₹145.00</p>
+            </div>
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='images/blackcanvas.jpg') }}">
+                <h4>Jordan Black Canvas</h4>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                    </div>
+                </div>
+                <p>₹600.00</p>
+            </div>
+            <div class="col-4">
+                <img src="{{ url_for('static', filename='images/whitecement.jpg') }}">
+                <h4>Jordan White cement</h4>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                    </div>
+                </div>
+                <p>₹575</p>
+            </div>
+        </div>
+    </div>
+
+    <!----------- offer-------------->
+    <div class="exclusive-offer">
+        <h2 class="title">Exclusively Available on Sneaker Head Store</h2>
+        <div class="offer-content">
+            <img src="{{ url_for('static', filename='images/x tavis.jpg') }}" class="offer-img">
+            <div class="offer-details">
+                <h3>Travis Scott SB Dunks</h3>
+                <p>The Nike SB Dunk Low Travis Scott is a limited edition sneaker, the result of a collaboration between Nike and rapper Travis Scott.</p>
+                <a href="" class="btn">Buy Now &#8594;</a>
+                <div class="class">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                    </div>
+                </div>
+                <p>₹2500.00</p>
+            </div>
+        </div>
+    </div>
+
+    <!------------- testimonial-------------------->
+    <div class="testimonial">
+        <div class="small-container">
+            <h2 class="title">Customer Testimonials</h2>
+            <div class="row">
+                <div class="col-3">
+                    <h3>Travis Scott</h3>
+                    <i class="fa fa-quote-left"></i>
+                    <p>Great Collections and original Products</p>
+                    <img src="{{ url_for('static', filename='images/Travisscoot.jpg') }}" alt="User 1">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <h3>Jane Smith</h3>
+                    <i class="fa fa-quote-left"></i>
+                    <p>Fast shipping and the shoes are exactly as described. Will shop again!</p>
+                    <img src="{{ url_for('static', filename='images/Blonde1.jpg') }}" alt="User 2">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <h3>Kendrik Lamar</h3>
+                    <i class="fa fa-quote-left"></i>
+                    <p>She is propably a minorrrrrrrrr</p>
+                    <img src="{{ url_for('static', filename='images/drake.jpg') }}" alt="User 1">
+                    <div class="rating">
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                        <i class="fa fa-star" style="color: #ff523b;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!----------------Brands----------------->
+
+
+<div class="branch">
+    <div class="small-container">
+        <div class="row">
+            <div class="class">
+                <img src="{{ url_for('static', filename='images') }}" alt="">
+            </div>
+            <div class="col-5">
+                <img src="{{ url_for('static', filename='images/newbalance.jpg') }}" alt="">
+            </div>
+            <div class="col-5">
+                <img src="{{ url_for('static', filename='images/upppp.jpg;.jpg') }}" >
+            </div>
+            <div class="col-5">
+                <img src="{{ url_for('static', filename='images/kanyeyez.jpg') }}" >
+            </div>
+            <div class="col-5">
+                <img src="{{ url_for('static', filename='images/converse.jpg') }}" >
+            </div>
+        </div>
+    </div>
+</div>
+<!--------------footer-->
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="footer-col-1">
+                <h3>Download Our App</h3>
+                <p>Download App for Android and iOS mobile phone.</p>
+                <div class="applogo">
+                    <img src="{{ url_for('static', filename='images/Playstore.png') }}" alt="Play Store">
+                    <img src="{{ url_for('static', filename='images/apple.png') }}" alt="App Store">
+                </div>
+            </div>
+            <div class="footer-col-2">
+                <img src="{{ url_for('static', filename='images/Trojan.jpg') }}" width="125px">
+                <p>Our Purpose Is To Sustainably Make the Pleasure and Benefits of Sports Accessible to the Many.</p>
+            </div>
+            <div class="footer-col-3">
+                <h3>Useful Links</h3>
+                <ul>
+                    <li>Coupons</li>
+                    <li>Blog Post</li>
+                    <li>Return Policy</li>
+                    <li>Join Affiliate</li>
+                </ul>
+            </div>
+            <div class="footer-col-4">
+                <h3>Follow Us</h3>
+                <ul>
+                    <li>Facebook</li>
+                    <li>Twitter</li>
+                    <li>Instagram</li>
+                    <li>YouTube</li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <p class="Copyright">Copyright 2024 - Trojan Sneakers</p>
+    </div>
+</div>
+
+</body>
+</html>

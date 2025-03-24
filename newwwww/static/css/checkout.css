@@ -1,0 +1,243 @@
+/* Checkout Page Styles */
+.checkout-container {
+    max-width: 1080px;
+    margin: 180px auto 40px;
+    padding: 0 20px;
+}
+
+.checkout-header {
+    margin-bottom: 40px;
+}
+
+.checkout-header h1 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.order-summary {
+    background: #f8f8f8;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.order-summary h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.checkout-item:last-child {
+    border-bottom: none;
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.item-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.item-quantity {
+    color: #666;
+    font-size: 14px;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.total-amount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #ddd;
+}
+
+.total-amount span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.total-amount #checkout-total {
+    color: #ff523b;
+    font-size: 24px;
+}
+
+/* Form Styles */
+.checkout-form {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.form-section {
+    padding: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.form-section h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ff523b;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Payment Methods */
+.payment-methods {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 25px;
+}
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.payment-method input[type="radio"] {
+    accent-color: #ff523b;
+}
+
+.payment-method label {
+    font-size: 15px;
+    color: #333;
+    cursor: pointer;
+}
+
+.payment-details {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Checkout Button */
+.checkout-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(to right, #ff523b, #ff3e1f);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 30px;
+}
+
+.checkout-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 82, 59, 0.3);
+}
+
+.checkout-button:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 768px) {
+    .checkout-container {
+        margin-top: 150px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .payment-methods {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-section {
+        padding: 20px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .checkout-container {
+        padding: 0 15px;
+    }
+
+    .checkout-header h1 {
+        font-size: 24px;
+    }
+
+    .form-section h2 {
+        font-size: 20px;
+    }
+
+    .total-amount span {
+        font-size: 16px;
+    }
+
+    .total-amount #checkout-total {
+        font-size: 20px;
+    }
+} 

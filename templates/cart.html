@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Trojan</title>
+    <link rel="stylesheet" href="/static/css/styles5.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="loader">
+        <img src="/static/images/nike_load.gif" alt="Loading...">
+    </div>
+    
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <a href="{{ url_for('home') }}"><img src="/static/Images/Trojan.jpg" width="220px"> </a>
+            </div>
+            <nav>
+             
+                    <ul id="MenuItems">
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="{{ url_for('products') }}">Products</a></li>
+                        <li><a href="{{ url_for('account') }}">Account</a></li>
+                    </ul>
+               
+            </nav>
+            <a href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.png') }}" width="30px" height="30px"></a>
+            <img src="{{ url_for('static', filename='images/menu.png') }}" class="menu-icon" onclick="menutoggle()">
+        </div>
+    </div>
+
+    <!------------------ Cart item details------>
+    <div class="small-container cart-page">
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+            <tbody id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+            </tbody>
+        </table>
+        <div class="total-price">
+            <table>
+                <tr>
+                    <td>Total</td>
+                    <td id="total-price">$0.00</td>
+                </tr>
+            </table>
+            <a href="{{ url_for('checkout') }}" class="checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <!--------------footer-->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col-1">
+                    <h3>Download our App</h3>
+                    <p>Download our app for Android and iOS mobile phones</p>
+                    <div class="applogo">
+                        <img src="/static/images/Playstore.png">
+                        <img src="/static/images/apple.png">
+                    </div>
+                </div>
+                <div class="footer-col-2">
+                    <img src="/static/images/Trojan111.jpg" alt="Logo">
+                    <p>Trojan offers the most exclusive sneakers Available on the market.</p>
+                </div>
+                <div class="footer-col-3">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li>Coupons</li>
+                        <li>Blog Post</li>
+                        <li>Return Policy</li>
+                        <li>Join Affiliate</li>
+                    </ul>
+                    <h3>Social Media</h3>
+                    <ul>
+                        <li>Github</li>
+                        <li>X</li>
+                        <li>LinkedIn</li>
+                        <li>Instagram</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="Copyright">Copyright 2025 - Trojan(SneakerHead)</p>
+        </div>
+    </div>
+
+    <!-------------js for toggle menu----------->
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+        MenuItems.style.maxHeight = "0px";
+
+        function menutoggle() {
+            if (MenuItems.style.maxHeight == "0px") {
+                MenuItems.style.maxHeight = "200px";
+            } else {
+                MenuItems.style.maxHeight = "0px";
+            }
+        }
+
+        // Function to check stock availability
+        async function checkStock(productId) {
+            try {
+                const response = await fetch(`/check_stock/${productId}`);
+                const data = await response.json();
+                return data.stock;
+            } catch (error) {
+                console.error('Error checking stock:', error);
+                return 0;
+            }
+        }
+
+        // Function to remove item from cart
+        function removeFromCart(productId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+        }
+
+        // Function to update cart display
+        async function updateCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsContainer = document.getElementById('cart-items');
+            const totalPriceElement = document.getElementById('total-price');
+            cartItemsContainer.innerHTML = '';
+            let totalPrice = 0;
+            let hasOutOfStock = false;
+
+            for (const product of cart) {
+                const currentStock = await checkStock(product.id);
+                const subtotal = product.price * product.quantity;
+                totalPrice += subtotal;
+
+                // Ensure image path starts with /static/
+                const imagePath = product.image.startsWith('/static/') ? product.image : '/static/' + product.image;
+
+                const cartItem = document.createElement('tr');
+                cartItem.innerHTML = `
+                    <td>
+                        <div class="cart-info">
+                            <img src="${imagePath}" alt="${product.name}">
+                            <div>
+                                <p>${product.name}</p>
+                                <small>Price: ₹${product.price}</small>
+                                <br>
+                                ${currentStock < product.quantity ? '<span class="out-of-stock">Out of Stock</span><br>' : ''}
+                                <button onclick="removeFromCart('${product.id}')">Remove</button>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${product.quantity}</td>
+                    <td>₹${subtotal.toFixed(2)}</td>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+
+                if (currentStock < product.quantity) {
+                    hasOutOfStock = true;
+                }
+            }
+
+            totalPriceElement.innerText = `₹${totalPrice.toFixed(2)}`;
+
+            // Disable checkout button if any item is out of stock
+            const checkoutBtn = document.querySelector('.checkout-btn');
+            if (hasOutOfStock) {
+                checkoutBtn.style.opacity = '0.5';
+                checkoutBtn.style.pointerEvents = 'none';
+                checkoutBtn.title = 'Some items are out of stock';
+            } else {
+                checkoutBtn.style.opacity = '1';
+                checkoutBtn.style.pointerEvents = 'auto';
+                checkoutBtn.title = '';
+            }
+        }
+
+        // Function to update stock in database
+        async function updateStock(productId, quantity) {
+            try {
+                const response = await fetch(`/update_stock/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ quantity: quantity })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to update stock');
+                }
+            } catch (error) {
+                console.error('Error updating stock:', error);
+                alert('Error updating stock. Please try again.');
+            }
+        }
+
+        // Handle checkout process
+        document.querySelector('.checkout-btn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let canCheckout = true;
+            
+            // Check stock for each item before proceeding
+            for (const item of cart) {
+                const currentStock = await checkStock(item.id);
+                if (currentStock <= 0) {
+                    canCheckout = false;
+                    break;
+                }
+            }
+            
+            if (!canCheckout) {
+                alert('Some items in your cart are out of stock. Please remove them to proceed.');
+                return;
+            }
+            
+            // Update stock and proceed with checkout
+            for (const item of cart) {
+                await updateStock(item.id, item.quantity);
+            }
+            
+            // Clear the cart and redirect
+            localStorage.removeItem('cart');
+            window.location.href = this.href;
+        });
+
+        // Initialize cart on page load
+        document.addEventListener('DOMContentLoaded', updateCart);
+
+        // Add styles for out of stock items
+        const style = document.createElement('style');
+        style.textContent = `
+            .out-of-stock {
+                color: #ff6b6b;
+                font-weight: bold;
+                display: inline-block;
+                margin: 5px 0;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

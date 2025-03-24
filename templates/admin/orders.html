@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders - Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        .order-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 150px;
+        }
+
+        .order-details {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-items {
+            margin: 1rem 0;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .status-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+
+        .update-status-btn {
+            padding: 0.5rem 1rem;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .update-status-btn:hover {
+            background: #45a049;
+        }
+
+        .customer-info {
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .customer-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+
+        .customer-info p {
+            margin: 0.25rem 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body class="admin-container">
+    <!-- Navigation -->
+    <nav class="admin-nav">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="admin-logo">
+        <h2>Admin Dashboard</h2>
+        <div class="nav-links">
+            <a href="{{ url_for('admin_dashboard') }}" class="view-site">Dashboard</a>
+            <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="admin-content">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="orders-section">
+            <h3>Orders Management</h3>
+            
+            <div class="orders-list">
+                {% if orders %}
+                    {% for order in orders %}
+                        {% if order %}
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <h4>Order #{{ order._id }}</h4>
+                                    {% if order.order_date %}
+                                        <span class="order-date">{{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="order-details">
+                                    <div class="customer-info">
+                                        <h5>Customer Information</h5>
+                                        {% set customer = order.get('customer_info', {}) %}
+                                        <p>Name: {{ customer.get('name', 'N/A') }}</p>
+                                        <p>Email: {{ customer.get('email', 'N/A') }}</p>
+                                        <p>Phone: {{ customer.get('phone', 'N/A') }}</p>
+                                        <p>Address: {{ customer.get('address', 'N/A') }}</p>
+                                        <p>City: {{ customer.get('city', 'N/A') }}</p>
+                                        <p>State: {{ customer.get('state', 'N/A') }}</p>
+                                        <p>Pincode: {{ customer.get('pincode', 'N/A') }}</p>
+                                    </div>
+                                    
+                                    <div class="order-items">
+                                        <h5>Order Items</h5>
+                                        {% set items = order.get('items', []) %}
+                                        {% if items %}
+                                            {% for item in items %}
+                                                <div class="order-item">
+                                                    <p>{{ item.get('name', 'N/A') }} x {{ item.get('quantity', 0) }}</p>
+                                                    <p>₹{{ "%.2f"|format(item.get('price', 0)) }}</p>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <p>No items in this order</p>
+                                        {% endif %}
+                                        
+                                        <div class="order-total">
+                                            <strong>Total Amount: ₹{{ "%.2f"|format(order.get('total_amount', 0)) }}</strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="order-status">
+                                        <h5>Order Status</h5>
+                                        <form method="POST" action="{{ url_for('update_order_status', order_id=order._id) }}">
+                                            <select name="status" onchange="this.form.submit()">
+                                                {% set current_status = order.get('status', 'pending') %}
+                                                <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>Pending</option>
+                                                <option value="processing" {% if current_status == 'processing' %}selected{% endif %}>Processing</option>
+                                                <option value="shipped" {% if current_status == 'shipped' %}selected{% endif %}>Shipped</option>
+                                                <option value="delivered" {% if current_status == 'delivered' %}selected{% endif %}>Delivered</option>
+                                                <option value="cancelled" {% if current_status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="no-orders">
+                        <p>No orders found in the database.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-hide flash messages after 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const flashMessages = document.querySelectorAll('.flash-message');
+                flashMessages.forEach(function(message) {
+                    message.style.display = 'none';
+                });
+            }, 3000);
+        });
+    </script>
+</body>
+</html> 
